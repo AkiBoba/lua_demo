@@ -28,7 +28,7 @@ local OpenTable = {}
 local HighTable = {}
 local LowTable = {}
 local CloseTable = {}
-local FileName = 'C:\\Lua\\brant.txt'
+local FileName = 'C:\\projects\\lua_demo\\brant.txt'
 local FileRead
 local StopRead = true
 
@@ -59,7 +59,7 @@ local SlowSMA = {}
 
 FastSMA = SMA(CloseTable, FastSMA_N)
 SlowSMA = SMA(CloseTable, SlowSMA_N)
-for j = 1, i do
+for j = 1, #TickerTable do
     print(TickerTable[j],
 DateTable[j],TimeTable[j],OpenTable[j],HighTable[j],LowTable[j],CloseTable[j], FastSMA[j], SlowSMA[j])
 end
