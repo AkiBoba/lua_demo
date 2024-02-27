@@ -22,13 +22,37 @@ function main()
     AddColumn(TableRTS, 14, 'Min N', true, QTABLE_INT_TYPE, 10)
     CreateWindow(TableRTS)
     SetWindowCaption(TableRTS, 'Graphics info RTS')
-    SetWindowPos(TableRTS, 0,10,900,70)
+    SetWindowPos(TableRTS, 0,0,1100,100)
     InsertRow(TableRTS, -1)
 
     local RTSPrice = CreateDataSource('SPBFUT', 'SiH4', INTERVAL_H1)
+    local RTSN = RTSPrice:Size()
+    local Year = RTSPrice:T(RTSN).year
+    local Month = RTSPrice:T(RTSN).month
+    local Day = RTSPrice:T(RTSN).day
+    local Hour = RTSPrice:T(RTSN).hour
+    local Min = RTSPrice:T(RTSN).min
+    local Sec = RTSPrice:T(RTSN).sec
+    local Open = RTSPrice:O(RTSN)
+    local High = RTSPrice:H(RTSN)
+    local Low = RTSPrice:L(RTSN)
+    local Close = RTSPrice:C(RTSN)
+    local Vol = RTSPrice:V(RTSN)
+    local MaxN = 0
+    local MinN = Low
+    local N = 200
+    local j = RTSN
+    while j >= RTSN-N do
+        if RTSPrice:H(j) > MaxN then
+            MaxN = RTSPrice:H(j)
+        end
+        if RTSPrice:L(j) < MinN then
+            MinN = RTSPrice:L(j)
+        end
+        j=j-1
+    end
 
-
-    SetCell(TableRTS, 1,1, tostring(RTSName))
+    SetCell(TableRTS, 1,1, tostring('RTSName'))
     SetCell(TableRTS, 1,2, tostring(Year))
     SetCell(TableRTS, 1,3, tostring(Month))
     SetCell(TableRTS, 1,4, tostring(Day))
