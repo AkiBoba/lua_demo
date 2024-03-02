@@ -14,19 +14,50 @@ ACCOUNT = 'SPBFUT000zt'
 CLIENT_CODE = 'SPBFUT000zt'
 CLASS_CODE = 'SPBFUT'
 SEC_CODE = 'SiH4'
+ID_B = 1010001
+
+function OnTransReply(order)
+    if order.trans_id == ID_B then
+        StatusOrderB = order.status
+        NumOrderB = order.order_num
+        msgOrderB = order.result_msg
+    end
+end
 
 function main()
     local PriceRTSBuy = getParamEx(CLASS_CODE, SEC_CODE, "LAST").param_value
+    message(tostring(PriceRTSBuy))
     local LimitOrderBuy = {
         ["ACTION"] = "NEW_ORDER",
         ["ACCOUNT"] = ACCOUNT,
-        ["OPERATION"] = "B",
+        ["OPERATION"] = "S",
         ["CLASSCODE"] = CLASS_CODE,
         ["SECCODE"] = SEC_CODE,
-        ["PRICE"] = tostring(PriceRTSBuy),
+        ["PRICE"] = round(PriceRTSBuy, 0),
         ["QUANTITY"] = tostring(1),
-        ["TRANS_ID"] = tostring(1)
+        ["TRANS_ID"] = tostring(ID_B)
     }
     local Err_Order = sendTransaction(LimitOrderBuy)
+    message(Err_Order)
+    while StatusOrderB == nil and Err_Order == '' do
+        sleep(10)
+    end
+    if StatusOrderB == 3 then
+        message("ID: "..ID_B.."\nNum: "..NumOrderB.."\nMSG: "..msgOrderB, 1)
+    elseif StatusOrderB == nil then
+        message("StatusOrderB = nil. Transaction "..ID_B.."didn't "..Err_Order, 1)
+    elseif StatusOrderB ~= nil then
+        message(""..msgOrderB, 1)
+    end
+    ID_B = ID_B + 1
+    local orderRTSB = {}
+    local NumOrderTable = 0
+    local NumStringTable
+    local NumberOrders = getNumberOf("orders")
+    orderRTSB = getItem("orders", 0)
+end
+
+function round(num, numDecimalPlaces)
+    return string.format("%." .. numDecimalPlaces .. "f", num)
 end
 

@@ -311,3 +311,7 @@ function myLog(str)
     end
     f:flush() -- Сохраняет изменения в файле
 end
+
+function round(num, numDecimalPlaces)
+    return string.format("%." .. numDecimalPlaces .. "f", num)
+end
